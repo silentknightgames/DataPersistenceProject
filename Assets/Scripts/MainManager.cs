@@ -12,13 +12,22 @@ public class MainManager : MonoBehaviour
 
     public Text ScoreText;
     public GameObject GameOverText;
+    [SerializeField] private Text bestScoreText;
     
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
 
-    
+    #region Singleton
+    public static MainManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+    #endregion
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +44,11 @@ public class MainManager : MonoBehaviour
                 brick.PointValue = pointCountArray[i];
                 brick.onDestroyed.AddListener(AddPoint);
             }
+        }
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.ShowBestScore(bestScoreText);
         }
     }
 
@@ -59,6 +73,10 @@ public class MainManager : MonoBehaviour
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
+            else if (Input.GetKeyDown(KeyCode.B))
+            {
+                SceneManager.LoadScene(0);
+            }
         }
     }
 
@@ -71,6 +89,20 @@ public class MainManager : MonoBehaviour
     public void GameOver()
     {
         m_GameOver = true;
+
+        //update best score
+        if (GameManager.Instance != null)
+        {
+            if (m_Points > GameManager.BestScore)
+            {
+                GameManager.BestScore = m_Points;
+                GameManager.BestPlayer = GameManager.Instance.PlayerName;
+
+                GameManager.Instance.ShowBestScore(bestScoreText);
+                GameManager.Instance.SaveBest();
+            }
+        }
+
         GameOverText.SetActive(true);
     }
 }

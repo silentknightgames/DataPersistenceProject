@@ -99,9 +99,14 @@ public class MainManager : MonoBehaviour
                 GameManager.BestPlayer = GameManager.Instance.PlayerName;
 
                 GameManager.Instance.ShowBestScore(bestScoreText);
-                GameManager.Instance.SaveBest();
             }
         }
+
+        //update leaderboard
+        GameManager.Instance.UpdateLeaderboard(m_Points, GameManager.Instance.PlayerName);
+        
+        //save
+        GameManager.Instance.SaveBest();
 
         GameOverText.SetActive(true);
     }

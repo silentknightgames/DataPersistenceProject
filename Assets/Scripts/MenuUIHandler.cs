@@ -28,12 +28,9 @@ public class MenuUIHandler : MonoBehaviour
         GameManager.Instance.PlayerName = nameField.text;
     }
 
-    public void ResetBestScore()
+    public void ToLeaderboard()
     {
-        GameManager.BestPlayer = "";
-        GameManager.BestScore = 0;
-
-        GameManager.Instance.ShowBestScore(bestScoreText);
+        SceneManager.LoadScene(2);
     }
 
     public void QuitApp()
